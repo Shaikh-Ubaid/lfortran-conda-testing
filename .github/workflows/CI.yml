@@ -198,7 +198,6 @@ jobs:
           variant: sccache
           key: ${{ github.job }}-ubuntu-latest
 
-
       - name: Build SciPy
         shell: bash -e -x -l {0}
         run: |
@@ -213,13 +212,13 @@ jobs:
             git submodule update --init
             mkdir lfortran-build/
             cd lfortran-build/
-            LIBRARY_PATH="`pwd`/../../src/runtime/"
+            LIBRARY_PATH="`which lfortran`/../../share/lfortran/lib"
             FC=lfortran cmake \
               -DCMAKE_Fortran_FLAGS=--verbose \
               -DLFORTRAN_RUNTIME_LIBRARY_PATH=$LIBRARY_PATH \
               ..
             make install
-            cp ${{ github.workspace }}/src/runtime/liblfortran_runtime.*  $CONDA_PREFIX/lib
+            cp $LIBRARY_PATH/liblfortran_runtime.*  $CONDA_PREFIX/lib
             cd ../
             python dev.py build
 
