@@ -175,24 +175,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      - uses: mamba-org/setup-micromamba@v1
-        with:
-          environment-file: environment.yml
-          create-args: >-
-            lfortran=${{ env.LFORTRAN_VERSION }}
-            python=3.10
-            openblas=0.3.21
-            llvm-openmp=14.0.4
-
-      - name: Print installed packages information
-        shell: bash -e -x -l {0}
-        run: |
-            which lfortran
-            micromamba env list
-            micromamba activate lf
-            micromamba list
-            which lfortran
-
       - uses: hendrikmuhs/ccache-action@main
         with:
           variant: sccache
@@ -209,6 +191,7 @@ jobs:
             git checkout 84ac735ae7a4071aee5cb84067e89530d55e27e2
             micromamba env create -f environment.yml
             micromamba activate scipy-dev
+            micromamba install -c conda-forge lfortran=${{ env.LFORTRAN_VERSION }}
             git submodule update --init
             mkdir lfortran-build/
             cd lfortran-build/
